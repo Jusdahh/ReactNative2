@@ -1,61 +1,70 @@
-import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { StyleSheet, Text, View, StatusBar, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import React from 'react';
+import { useCart } from '../contexts/CartContext';
+import { useProducts } from '../contexts/ProductsContext';
 
 export default function Home() {
-  const [produtos, setProdutos] = useState([]);
+  const { addToCart } = useCart();
+  const { products, loading } = useProducts();
 
-  useEffect(() => {
-    fetch('https://api-sal.vercel.app/produtos')
-      .then(response => response.json())
-      .then(data => setProdutos(data));
-  }, []);
+  const handleAddToCart = (product) => {
+    addToCart(product);
+    alert('Produto adicionado ao carrinho!');
+  };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.productContainer}>
-      <Image source={{ uri: item.imagem }} style={styles.productImage} />
-      <Text style={styles.productPrice}>R${item.preco}</Text>
-    </View>
+  const renderProductItem = ({ item }) => (
+    <TouchableOpacity onPress={() => handleAddToCart(item)}>
+      <View>
+        <Text style={styles.texto}>{item.title}</Text>
+        <Text style={styles.texto}>Preço: ${item.price}</Text>
+      </View>
+    </TouchableOpacity>
   );
-
 
   return (
-    <FlatList
-      data={produtos}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id.toString()}
-      contentContainerStyle={styles.container}
-    />
+    <View style={styles.geral}>
+      <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
+        <View style={styles.subcontainer}>
+          <Text style={styles.titulo}>Loja do Coisa</Text>
+          <Text style={styles.texto}>Descriçãozinha da Loja dos cara</Text>
+        </View>
+        <View style={styles.subcontainer}>
+          <Text style={styles.titulo}>Produtos</Text>
+          {loading ? (
+            <Text>Loading...</Text>
+          ) : (
+            <FlatList showsVerticalScrollIndicator={false}
+              data={products}
+              renderItem={renderProductItem}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          )}
+        </View>
+    </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-    container: {
-      padding: 16,
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-    },
-    productContainer: {
-      flexDirection: 'column',
-      backgroundColor: '#fff',
-      borderRadius: 8,
-      overflow: 'hidden',
-      margin: 3,
-      elevation: 2,
-    },
-    productImage: {
-      width: 120,
-      height: 120,
-      resizeMode: 'cover',
-      borderTopLeftRadius: 8,
-      borderBottomLeftRadius: 8,
-    },
-    productInfoContainer: {
-      flex: 1,
-      padding: 16,
-    },
-    productPrice: {
-      fontSize: 16,
-      color: '#19A500',
-      fontWeight: 'bold',
-    },
-  });
+  geral: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  subcontainer: {
+    marginBottom: 20,
+    padding: 16,
+  },
+  titulo: {
+    fontSize: 26,
+    color: '#000',
+    fontWeight: '500',
+    letterSpacing: 1,
+    marginBottom: 10,
+  },
+  texto: {
+    fontSize: 16,
+    color: '#000',
+    fontWeight: '400',
+    letterSpacing: 1,
+    marginBottom: 10,
+  },
+});
