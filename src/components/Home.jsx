@@ -1,22 +1,25 @@
-import { StyleSheet, Text, View, StatusBar, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, ScrollView, TouchableOpacity, FlatList, Image } from 'react-native';
 import React from 'react';
 import { useCart } from '../contexts/CartContext';
 import { useProducts } from '../contexts/ProductsContext';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function Home() {
+  const navigation = useNavigation();
   const { addToCart } = useCart();
   const { products, loading } = useProducts();
 
-  const handleAddToCart = (product) => {
-    addToCart(product);
-    alert('Produto adicionado ao carrinho!');
+  const goToProduct = (product) => {
+    navigation.navigate('Produto', { productId: product.id });
   };
 
   const renderProductItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleAddToCart(item)}>
+    <TouchableOpacity onPress={() => goToProduct(item)}>
       <View>
+        <Image source={{ uri: item.image }} style={{ width: 100, height: 100, borderRadius: 8 }} />
         <Text style={styles.texto}>{item.title}</Text>
-        <Text style={styles.texto}>Preço: ${item.price}</Text>
+        <Text style={styles.texto}>Preço: R${item.price}</Text>
       </View>
     </TouchableOpacity>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useCart } from '../contexts/CartContext';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -23,12 +23,16 @@ export default function Cart() {
   };
 
   const renderCartItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleRemoveFromCart(item)}>
     <View style={styles.cartItem}>
+      <Image source={{ uri: item.image }} style={{ width: 100, height: 100, borderRadius: 8 }} />
       <Text style={styles.itemTitle}>{item.title}</Text>
-      <Text style={styles.itemPrice}>Preço: ${item.price}</Text>
-    </View>
+      <View style={styles.containerRow}>
+      <Text style={styles.itemPrice}>R${item.price}</Text>
+      <TouchableOpacity onPress={() => handleRemoveFromCart(item)}>
+        <MaterialCommunityIcons name="cart-remove" style={{fontSize: 26, padding: 12, borderRadius: 10, color:"#000"}} />
     </TouchableOpacity>
+    </View>
+    </View>
   );
 
   return (
@@ -74,8 +78,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   itemPrice: {
-    fontSize: 14,
-    color: '#555',
+    fontSize: 18,
+    color: '#000',
+    fontWeight: 'bold',
   },
   emptyText: {
     fontSize: 16,
