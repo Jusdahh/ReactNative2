@@ -45,7 +45,7 @@ export default function Cart() {
       <View style={styles.containerRow}>
         <Text style={styles.title}>Carrinho</Text>
         <TouchableOpacity onPress={() => clearCart()}>
-          <MaterialCommunityIcons name="delete" style={{ fontSize: 26, padding: 12, borderRadius: 10, backgroundColor: "lightgray" }} />
+          <MaterialCommunityIcons name="delete" style={{ fontSize: 26, padding: 12, borderRadius: 10, backgroundColor: "#FA8072", color: "#000" }} />
         </TouchableOpacity>
       </View>
       <FlatList

@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
     borderRadius: 10,
-    backgroundColor: "lightgray"
+    backgroundColor: "lightgreen",
   },
   containerRow2: {
     flexDirection: 'row',
