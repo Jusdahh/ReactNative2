@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useCart } from '../contexts/CartContext';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -7,6 +7,11 @@ export default function Cart() {
   const { cart } = useCart();
   const { removeFromCart } = useCart();
   const { clearCart } = useCart();
+
+
+  const getTotalPrice = () => {
+    return cart.reduce((total, item) => total + item.price, 0);
+  };
 
   if (!Array.isArray(cart) || cart.length === 0) {
     return (
@@ -27,27 +32,28 @@ export default function Cart() {
       <Image source={{ uri: item.image }} style={{ width: 100, height: 100, borderRadius: 8 }} />
       <Text style={styles.itemTitle}>{item.title}</Text>
       <View style={styles.containerRow}>
-      <Text style={styles.itemPrice}>R${item.price}</Text>
-      <TouchableOpacity onPress={() => handleRemoveFromCart(item)}>
-        <MaterialCommunityIcons name="cart-remove" style={{fontSize: 26, padding: 12, borderRadius: 10, color:"#000"}} />
-    </TouchableOpacity>
-    </View>
+        <Text style={styles.itemPrice}>R${item.price}</Text>
+        <TouchableOpacity onPress={() => handleRemoveFromCart(item)}>
+          <MaterialCommunityIcons name="cart-remove" style={{ fontSize: 26, padding: 12, borderRadius: 10, color: "#000" }} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
   return (
     <View style={styles.container}>
       <View style={styles.containerRow}>
-      <Text style={styles.title}>Carrinho</Text>
-      <TouchableOpacity onPress={() => clearCart()}>
-        <MaterialCommunityIcons name="delete" style={{fontSize: 26, padding: 12, borderRadius: 10, backgroundColor: "lightgray"}} />
-      </TouchableOpacity>
+        <Text style={styles.title}>Carrinho</Text>
+        <TouchableOpacity onPress={() => clearCart()}>
+          <MaterialCommunityIcons name="delete" style={{ fontSize: 26, padding: 12, borderRadius: 10, backgroundColor: "lightgray" }} />
+        </TouchableOpacity>
       </View>
       <FlatList
         data={cart}
         renderItem={renderCartItem}
         keyExtractor={(item) => item.id.toString()}
       />
+      <Text style={styles.totalPrice}>Preço Total: R${getTotalPrice().toFixed(2)}</Text>
     </View>
   );
 };
@@ -86,5 +92,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#555',
     marginTop: 16,
+  },
+  totalPrice: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 20,
+    alignSelf: 'flex-end',
+  },
+  quantityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  quantityButton: {
+    fontSize: 20,
+    paddingHorizontal: 8,
+  },
+  quantityText: {
+    fontSize: 18,
+    marginHorizontal: 10,
   },
 });
