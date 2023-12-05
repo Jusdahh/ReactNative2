@@ -6,11 +6,13 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CartProvider} from './src/contexts/CartContext';
 import {ProductProvider} from './src/contexts/ProductsContext';
+import { AuthProvider } from './src/contexts/AuthContext';
 
 import Home from './src/components/Home';
 import Cart from './src/components/Cart';
 import Profile from './src/components/Profile';
 import Product from './src/components/Product';
+import Login from './src/components/Login';
 
 const Tab = createBottomTabNavigator();
 const stack = createNativeStackNavigator();
@@ -64,10 +66,13 @@ export default function App() {
     <NavigationContainer>
       <CartProvider>
         <ProductProvider>
+          <AuthProvider>
           <stack.Navigator screenOptions={{headerShown: false}}>
             <stack.Screen name="Principal" component={Tabs} />
             <stack.Screen name="Produto" component={Product} />
+            <stack.Screen name="Login" component={Login} />
           </stack.Navigator>
+          </AuthProvider>
         </ProductProvider>
       </CartProvider>
     </NavigationContainer>
